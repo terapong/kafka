@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<p:panel header="Topic managment" closable="true">
+		<p:ajax event="close" listener="#{indexBean.handleClose}"  update=":mainCenterForm"/>
+		<p:panelGrid style="width: 100%">
+			<p:row>
+				<p:column>
+					<p:dataTable id="tblTopic" var="r" selection="#{topicAdminBean.selectedRow}" rowKey="#{r.id}"
+								selectionMode="single" value="#{topicAdminBean.topics}"  rows="10" paginator="true"
+								paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+								currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+								rowsPerPageTemplate="5,10,15">
+	        	<p:ajax event="rowSelect" listener="#{topicAdminBean.onRowSelect}" update=":messages" />
+						
+						<p:column headerText="Name">
+							<h:outputText value="#{r.name}" />
+						</p:column>
+						
+						<p:column headerText="Partition">
+							<h:outputText value="#{r.partition}" />
+						</p:column>
+						
+						<p:column headerText="Replicas">
+							<h:outputText value="#{r.replicas}" />
+						</p:column>
+						
+						<p:column>
+									<p:commandButton value="Delete" disabled="true"
+										actionListener="#{topicAdminBean.btnDeleteClick(r)}"
+										oncomplete="PF('confirmDeleteCarDialog').show()" process="@this"
+										resetValues="true" icon="ui-icon-close" />
+								</p:column>
+	
+						<f:facet name="footer">
+							<p:commandButton icon="ui-icon-plus" value="Add topic"
+							actionListener="#{topicAdminBean.btnNewClick}"
+								oncomplete="PF('newObjectDlg').show()" process="@this"
+								update=":mainCenterForm" resetValues="true"/>
+						</f:facet>
+					</p:dataTable>
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:panel>
+	
+	<p:confirmDialog message="Delete ?" closable="flase" header="" sevdeleteerity="alert" widgetVar="confirmDeleteCarDialog" appendTo="@(body)">  
+	  <p:commandButton value="yes" update=":mainCenterForm" onclick="PF('confirmDeleteCarDialog').hide()" actionListener="#{topicAdminBean.confirmDeleteClick}" process="@this" ajax="true" icon="ui-icon-check"/>  
+	  <p:commandButton value="no" onclick="PF('confirmDeleteCarDialog').hide()" type="button"  icon="ui-icon-closethick"/>   
+ 	</p:confirmDialog>
+		
+	<p:dialog id="newObjectDlg" header="Add topic" 	widgetVar="newObjectDlg" modal="true" appendTo="@(body)" width="350px" height="150px" closable="true">
+		<p:panelGrid id="panelInput">
+			<p:row>
+				<p:column><h:outputText value="Name : " /></p:column>
+				<p:column><p:inputText value="#{topicAdminBean.selectedRow.name}" required="true" requiredMessage="Please fill topic name"/></p:column>
+			</p:row>
+			<p:row>
+				<p:column><h:outputText value="Partition : " /></p:column>
+				<p:column><p:inputNumber value="#{topicAdminBean.selectedRow.partition}" size="5"/></p:column>
+			</p:row>
+			<p:row>
+				<p:column><h:outputText value="Replicas : " /></p:column>
+				<p:column><p:inputNumber value="#{topicAdminBean.selectedRow.replicas}" size="5"/></p:column>
+			</p:row>
+			<p:row>
+				<p:column style="text-align: center" colspan="2">
+					<p:commandButton value="Save" icon="ui-icon-disk"
+						actionListener="#{topicAdminBean.btnSaveClick}"
+						update="mainCenterForm" process="@this panelInput"
+						oncomplete="if (args.validationFailed) {PF('newObjectDlg').show(); } else {PF('newObjectDlg').hide(); }" />
+					<p:commandButton value="Cancel" icon="ui-icon-close"
+						onclick="PF('newObjectDlg').hide()" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:dialog>
+	
+</ui:composition>
+</html>

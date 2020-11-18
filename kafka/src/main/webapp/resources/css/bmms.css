@@ -1,0 +1,37 @@
+root {
+	display: block;
+}
+
+.ui-widget {
+	font-size: 12px !important;
+}
+
+.ui-panelgrid>*>tr, .ui-panelgrid>*>tr>td.ui-panelgrid-cell {
+	border: none;
+	background: transparent !important;
+}
+
+.ui-selectonelistbox {
+	border: none;
+	background: transparent !important;
+}
+
+.ui-layout-north {
+	z-index: 20 !important;
+	overflow: visible !important;
+}
+
+.ui-layout-north .ui-layout-unit-content {
+	overflow: visible !important;
+	background: transparent !important;
+}
+
+.lottoInput {
+	width: 90px;
+}
+
+.lottoBg {
+	overflow: visible !important;
+	background: transparent !important;
+}
+/* .ui-datatable table { width: auto !important; } */

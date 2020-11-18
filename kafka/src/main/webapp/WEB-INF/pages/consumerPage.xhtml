@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui">
+
+<ui:composition>
+	<p:panel header="Producer managment" closable="true" id="panelProducer">
+		<p:ajax event="close" listener="#{indexBean.handleClose}"
+			update=":mainCenterForm" />
+		<p:panelGrid style="width: 100%">
+			<p:row>
+				<p:column>
+					<p:panelGrid>
+						<p:row>
+							<p:column>First name : </p:column>
+							<p:column>
+								<p:inputText value="#{producerBean.newUser.firstName}"
+									rendered="true" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>Last name : </p:column>
+							<p:column>
+								<p:inputText value="#{producerBean.newUser.lastName}"
+									rendered="true" />
+							</p:column>
+						</p:row>
+						<p:row>
+							<p:column>E-mail : </p:column>
+							<p:column>
+								<p:inputText value="#{producerBean.newUser.email}"
+									required="true" />
+							</p:column>
+						</p:row>
+					</p:panelGrid>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:dataTable id="tblTopic" var="r"
+						selection="#{producerBean.selectedTopics}" rowKey="#{r.id}"
+						value="#{producerBean.topics}" rows="10" paginator="true"
+						style="margin-bottom:0"
+						paginatorTemplate="{CurrentPageReport} {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+						currentPageReportTemplate="{startRecord}-{endRecord} of {totalRecords} records"
+						rowsPerPageTemplate="5,10,15">
+						<f:facet name="header">Select topic</f:facet>
+						<p:column selectionMode="multiple"
+							style="width:16px;text-align:center" />
+						<p:column headerText="Name">
+							<h:outputText value="#{r.name}" />
+						</p:column>
+						<p:column headerText="Partition">
+							<h:outputText value="#{r.partition}" />
+						</p:column>
+						<p:column headerText="Replicas">
+							<h:outputText value="#{r.replicas}" />
+						</p:column>
+					</p:dataTable>
+				</p:column>
+			</p:row>
+			<p:row>
+				<p:column>
+					<p:commandButton value="Send..." icon="ui-icon-play"
+						actionListener="#{producerBean.btnSendClick}"
+						process="@this panelProducer" update=":mainCenterForm" />
+				</p:column>
+			</p:row>
+		</p:panelGrid>
+	</p:panel>
+</ui:composition>
+
+</html>
